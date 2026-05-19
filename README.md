@@ -17,7 +17,6 @@ Installed binaries:
 /opt/homebrew/bin/bastion-session
 /opt/homebrew/bin/hop
 /opt/homebrew/bin/oci-hop
-/opt/homebrew/bin/oci-bassh
 ```
 
 ## Upgrade
@@ -34,7 +33,6 @@ brew upgrade oci-context bastion-session oci-hop
 | `oci-context` | OCI context, auth readiness, local metadata, and daemon support. |
 | `bastion-session` | OCI Bastion managed SSH sessions and VM-facing SSH aliases. |
 | `oci-hop` | Small front-door CLI for host-through-bastion workflows. |
-| `oci-bassh` | Alias for `oci-hop` kept for existing install commands. |
 
 The formulae build from tagged source releases.
 
@@ -45,9 +43,7 @@ oci-context version -o json
 bastion-session version -o json
 hop version -o json
 oci-hop version -o json
-oci-bassh version -o json
 brew test adrianmross/tap/oci-context
 brew test adrianmross/tap/bastion-session
 brew test adrianmross/tap/oci-hop
-brew test adrianmross/tap/oci-bassh
 ```
