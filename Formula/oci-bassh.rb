@@ -1,8 +1,8 @@
 class OciBassh < Formula
   desc "Unified operator CLI for SSH to OCI compute hosts through OCI Bastion"
   homepage "https://github.com/adrianmross/oci-bassh"
-  url "https://github.com/adrianmross/oci-bassh/archive/refs/tags/v0.5.4.tar.gz"
-  sha256 "b454fd8f8e4f6f6fdf6228d8df1344d118c98113ef471d89e92742e4243a26c7"
+  url "https://github.com/adrianmross/oci-bassh/archive/refs/tags/v0.5.5.tar.gz"
+  sha256 "b1cd5552b98ddd1d1622f5f52779a05d5efb443631d9b4b3a6d7f51f09c47811"
   license "MIT"
 
   depends_on "go" => :build
