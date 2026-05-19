@@ -6,7 +6,7 @@ Homebrew formulae for OCI operator CLIs.
 
 ```bash
 brew tap adrianmross/tap
-brew install oci-context bastion-session oci-bassh
+brew install oci-context bastion-session oci-hop
 ```
 
 Installed binaries:
@@ -15,6 +15,8 @@ Installed binaries:
 /opt/homebrew/bin/oci-context
 /opt/homebrew/bin/oci-contextd
 /opt/homebrew/bin/bastion-session
+/opt/homebrew/bin/hop
+/opt/homebrew/bin/oci-hop
 /opt/homebrew/bin/oci-bassh
 ```
 
@@ -22,7 +24,7 @@ Installed binaries:
 
 ```bash
 brew update
-brew upgrade oci-context bastion-session oci-bassh
+brew upgrade oci-context bastion-session oci-hop
 ```
 
 ## Formulae
@@ -31,7 +33,8 @@ brew upgrade oci-context bastion-session oci-bassh
 | --- | --- |
 | `oci-context` | OCI context, auth readiness, local metadata, and daemon support. |
 | `bastion-session` | OCI Bastion managed SSH sessions and VM-facing SSH aliases. |
-| `oci-bassh` | Small front-door CLI for host-through-bastion workflows. |
+| `oci-hop` | Small front-door CLI for host-through-bastion workflows. |
+| `oci-bassh` | Alias for `oci-hop` kept for existing install commands. |
 
 The formulae build from tagged source releases.
 
@@ -40,8 +43,11 @@ The formulae build from tagged source releases.
 ```bash
 oci-context version -o json
 bastion-session version -o json
+hop version -o json
+oci-hop version -o json
 oci-bassh version -o json
 brew test adrianmross/tap/oci-context
 brew test adrianmross/tap/bastion-session
+brew test adrianmross/tap/oci-hop
 brew test adrianmross/tap/oci-bassh
 ```
