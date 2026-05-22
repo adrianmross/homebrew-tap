@@ -1,7 +1,6 @@
 class Pump < Formula
   desc "Sparse config hydration for JSON/YAML manifests"
   homepage "https://github.com/adrianmross/pump"
-  version "0.2.0"
   if OS.mac?
     if Hardware::CPU.arm?
       url "https://github.com/adrianmross/pump/releases/download/v0.2.0/pump-aarch64-apple-darwin.tar.xz"
