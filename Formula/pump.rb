@@ -3,17 +3,17 @@ class Pump < Formula
   homepage "https://github.com/adrianmross/pump"
   if OS.mac?
     if Hardware::CPU.arm?
-      url "https://github.com/adrianmross/pump/releases/download/v0.1.0/pump-aarch64-apple-darwin.tar.xz"
-      sha256 "45886ea4aa1e838a76f15d5595cbc313301217df7fdb4abb7b075062b6a039c2"
+      url "https://github.com/adrianmross/pump/releases/download/v0.1.1/pump-aarch64-apple-darwin.tar.xz"
+      sha256 "ee71dc4930cf7ae9c2d2caa75350a3be5faa455f1149a534d09a6305398c7fb5"
     end
     if Hardware::CPU.intel?
-      url "https://github.com/adrianmross/pump/releases/download/v0.1.0/pump-x86_64-apple-darwin.tar.xz"
-      sha256 "28b775a43ee4b8735ea3cd1b6d7ccb73fdca860f818fd612f7ae34f80f09d634"
+      url "https://github.com/adrianmross/pump/releases/download/v0.1.1/pump-x86_64-apple-darwin.tar.xz"
+      sha256 "acdbb523f314756b66d751ea48460c5f7d732def7c7079d5f36c3e1dbf7d7740"
     end
   end
   if OS.linux? && Hardware::CPU.intel?
-    url "https://github.com/adrianmross/pump/releases/download/v0.1.0/pump-x86_64-unknown-linux-gnu.tar.xz"
-    sha256 "834dff7f2ffe6d0cfe645314d615fe3b915ab0a9043e2a22aed164fea107bbd5"
+    url "https://github.com/adrianmross/pump/releases/download/v0.1.1/pump-x86_64-unknown-linux-gnu.tar.xz"
+    sha256 "7f4f01aa28872b4965fcbbcf1d38681e70d196edaeaa1e8224412d32ee8eaa03"
   end
   license "MIT"
 
