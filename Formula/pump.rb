@@ -1,19 +1,20 @@
 class Pump < Formula
   desc "Sparse config hydration for JSON/YAML manifests"
   homepage "https://github.com/adrianmross/pump"
+  version "0.2.0"
   if OS.mac?
     if Hardware::CPU.arm?
-      url "https://github.com/adrianmross/pump/releases/download/v0.1.1/pump-aarch64-apple-darwin.tar.xz"
-      sha256 "ee71dc4930cf7ae9c2d2caa75350a3be5faa455f1149a534d09a6305398c7fb5"
+      url "https://github.com/adrianmross/pump/releases/download/v0.2.0/pump-aarch64-apple-darwin.tar.xz"
+      sha256 "ce5df2bc85025e0f668777800a330fdb95af2818cc345fcf30f697faaef99d36"
     end
     if Hardware::CPU.intel?
-      url "https://github.com/adrianmross/pump/releases/download/v0.1.1/pump-x86_64-apple-darwin.tar.xz"
-      sha256 "acdbb523f314756b66d751ea48460c5f7d732def7c7079d5f36c3e1dbf7d7740"
+      url "https://github.com/adrianmross/pump/releases/download/v0.2.0/pump-x86_64-apple-darwin.tar.xz"
+      sha256 "10599cc244d0e938f3aeb6f2b39da83eec0e6524382f4cd385fc63401639380f"
     end
   end
   if OS.linux? && Hardware::CPU.intel?
-    url "https://github.com/adrianmross/pump/releases/download/v0.1.1/pump-x86_64-unknown-linux-gnu.tar.xz"
-    sha256 "7f4f01aa28872b4965fcbbcf1d38681e70d196edaeaa1e8224412d32ee8eaa03"
+    url "https://github.com/adrianmross/pump/releases/download/v0.2.0/pump-x86_64-unknown-linux-gnu.tar.xz"
+    sha256 "954523b1d4a0c2cfe9d5bc659bf34ae17ccb2edf3cf68459d3fc536be29e8f72"
   end
   license "MIT"
 
