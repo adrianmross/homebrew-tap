@@ -6,7 +6,7 @@ Homebrew formulae for OCI operator CLIs.
 
 ```bash
 brew tap adrianmross/tap
-brew install oci-context bastion-session oci-hop
+brew install oci-context bastion-session oci-hop matrix
 ```
 
 Installed binaries:
@@ -17,13 +17,14 @@ Installed binaries:
 /opt/homebrew/bin/bastion-session
 /opt/homebrew/bin/hop
 /opt/homebrew/bin/oci-hop
+/opt/homebrew/bin/matrix
 ```
 
 ## Upgrade
 
 ```bash
 brew update
-brew upgrade oci-context bastion-session oci-hop
+brew upgrade oci-context bastion-session oci-hop matrix
 ```
 
 ## Formulae
@@ -33,6 +34,7 @@ brew upgrade oci-context bastion-session oci-hop
 | `oci-context` | OCI context, auth readiness, local metadata, and daemon support. |
 | `bastion-session` | OCI Bastion managed SSH sessions and VM-facing SSH aliases. |
 | `oci-hop` | Small front-door CLI for host-through-bastion workflows. |
+| `matrix` | Compatibility matrix CLI for zones, levels, facts, gates, and traces. |
 
 The formulae build from tagged source releases.
 
@@ -46,4 +48,5 @@ oci-hop version -o json
 brew test adrianmross/tap/oci-context
 brew test adrianmross/tap/bastion-session
 brew test adrianmross/tap/oci-hop
+brew test adrianmross/tap/matrix
 ```
