@@ -4,6 +4,7 @@ class GitHubPrivateReleaseDownloadStrategy < CurlDownloadStrategy
     raise CurlDownloadStrategyError, "Set HOMEBREW_GITHUB_API_TOKEN, GITHUB_TOKEN, or GH_TOKEN to install wiz." if token.to_s.empty?
 
     meta[:headers] ||= []
+    meta[:headers] << "Accept: application/octet-stream"
     meta[:headers] << "Authorization: Bearer #{token}"
     super
   end
@@ -14,19 +15,19 @@ class Wiz < Formula
   homepage "https://github.com/red-wiz/wiz-platform-cli"
   if OS.mac?
     if Hardware::CPU.arm?
-      url "https://github.com/red-wiz/wiz-platform-cli/releases/download/v0.1.0/wiz-platform-cli-aarch64-apple-darwin.tar.xz",
+      url "https://api.github.com/repos/red-wiz/wiz-platform-cli/releases/assets/450322396",
           using: GitHubPrivateReleaseDownloadStrategy
       sha256 "cc8aa5c1a1466900219fbe9591cf9c28f55fe24075111cfda26b50d81f16e9ef"
     end
     if Hardware::CPU.intel?
-      url "https://github.com/red-wiz/wiz-platform-cli/releases/download/v0.1.0/wiz-platform-cli-x86_64-apple-darwin.tar.xz",
+      url "https://api.github.com/repos/red-wiz/wiz-platform-cli/releases/assets/450322418",
           using: GitHubPrivateReleaseDownloadStrategy
       sha256 "5968a250f83098568a4361a58f027984d5d458e12dfe4e8d60c69633fd9442fc"
     end
   end
   if OS.linux?
     if Hardware::CPU.intel?
-      url "https://github.com/red-wiz/wiz-platform-cli/releases/download/v0.1.0/wiz-platform-cli-x86_64-unknown-linux-gnu.tar.xz",
+      url "https://api.github.com/repos/red-wiz/wiz-platform-cli/releases/assets/450322422",
           using: GitHubPrivateReleaseDownloadStrategy
       sha256 "07621902b328ca73d5ca4a29c9e87e78d3d5e95ec58d179c678bd283b1ef97d9"
     end
