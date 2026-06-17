@@ -13,6 +13,7 @@ end
 class Wiz < Formula
   desc "Red Wiz platform CLI"
   homepage "https://github.com/red-wiz/wiz-platform-cli"
+  version "0.1.0"
   if OS.mac?
     if Hardware::CPU.arm?
       url "https://api.github.com/repos/red-wiz/wiz-platform-cli/releases/assets/450322396",
