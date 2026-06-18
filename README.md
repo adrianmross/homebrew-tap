@@ -38,6 +38,28 @@ brew upgrade oci-context bastion-session oci-hop matrix
 
 The formulae build from tagged source releases.
 
+## Development
+
+This repo uses `devenv` and `direnv`:
+
+```bash
+direnv allow
+devenv test
+```
+
+Useful tasks:
+
+```bash
+devenv tasks run tap:syntax
+devenv tasks run tap:audit
+devenv tasks run tap:brew-test
+devenv tasks run tap:validate
+```
+
+`tap:syntax` runs anywhere the dev shell works. `tap:audit` and
+`tap:brew-test` require Homebrew, so they are expected to run on a Homebrew
+host such as macOS or Linuxbrew.
+
 ## Verify
 
 ```bash
