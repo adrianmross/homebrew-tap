@@ -1,8 +1,8 @@
 class Matrix < Formula
   desc "Compatibility matrix CLI for software zones, levels, facts, gates, and traces"
   homepage "https://github.com/adrianmross/matrix"
-  url "https://github.com/adrianmross/matrix/archive/refs/tags/v0.3.16.tar.gz"
-  sha256 "210dcc22da8d4adf052c9b87fb4c13facbbc7dde36f6a529efe3cdae666c29a3"
+  url "https://github.com/adrianmross/matrix/archive/refs/tags/v0.3.17.tar.gz"
+  sha256 "73562b4638b31e34c81f5d567633f52a5411802ab0311549ba49520149025f85"
   license "Apache-2.0"
 
   depends_on "rust" => :build
