@@ -1,8 +1,8 @@
 class OciIdentityApps < Formula
   desc "Plan OCI Identity Domains OAuth applications for CLI and automation flows"
   homepage "https://github.com/adrianmross/oci-identity-apps"
-  url "https://github.com/adrianmross/oci-identity-apps/archive/refs/tags/v0.1.2.tar.gz"
-  sha256 "cfeae88b8a62cfeadef1ec24889d6293552d17cf038b47cd256f4bf7e8740ef6"
+  url "https://github.com/adrianmross/oci-identity-apps/archive/refs/tags/v0.1.4.tar.gz"
+  sha256 "95efb24a4daf688f670fc7c5659d9fddfdc4b6892b1c16e52dff0cd8c68c1401"
   license "MIT"
 
   depends_on "go" => :build
@@ -20,7 +20,10 @@ class OciIdentityApps < Formula
 
   test do
     assert_match version.to_s, shell_output("#{bin}/oci-identity-apps version")
-    output = shell_output("#{bin}/oci-identity-apps plan --issuer https://idcs-example.identity.oraclecloud.com --scope https://service.example.com/.default --include user --format json")
+    output = shell_output("#{bin}/oci-identity-apps plan " \
+                          "--issuer https://idcs-example.identity.oraclecloud.com " \
+                          "--scope https://service.example.com/.default " \
+                          "--include user --format json")
     assert_match "oci-identity-apps.plan.v1", output
     assert_match "authorization_code", output
   end
