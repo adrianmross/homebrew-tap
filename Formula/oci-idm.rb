@@ -5,6 +5,8 @@ class OciIdm < Formula
   sha256 "97cef41dac56cba0ebc09a5c367c806ac918b2204280a79af855682de2019d25"
   license "MIT"
 
+  conflicts_with "oci-identity-apps", because: "both install the oci-identity-apps compatibility command"
+
   depends_on "go" => :build
 
   def install
