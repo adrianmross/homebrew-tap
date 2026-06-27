@@ -36,7 +36,10 @@ brew upgrade oci-context bastion-session oci-hop matrix
 | `oci-hop` | Small front-door CLI for host-through-bastion workflows. |
 | `matrix` | Compatibility matrix CLI for zones, levels, facts, gates, and traces. |
 
-The formulae build from tagged source releases.
+Most formulae build from tagged source releases. The `matrix` formula installs
+prebuilt release archives for macOS and Linux so users do not need a local Rust
+build for normal installs. The archive includes `matrix`, `matrix-enter`, and
+`matrix-construct`.
 
 ## Development
 
