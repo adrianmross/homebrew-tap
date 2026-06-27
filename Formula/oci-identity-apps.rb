@@ -1,8 +1,8 @@
 class OciIdentityApps < Formula
   desc "Plan OCI Identity Domains OAuth applications for CLI and automation flows"
   homepage "https://github.com/adrianmross/oci-identity-apps"
-  url "https://github.com/adrianmross/oci-identity-apps/archive/refs/tags/v0.1.1.tar.gz"
-  sha256 "73e5a89eb8450e23f6d457339a57ab69e4e8840180428d7420c0fa09705a1ebd"
+  url "https://github.com/adrianmross/oci-identity-apps/archive/refs/tags/v0.1.2.tar.gz"
+  sha256 "cfeae88b8a62cfeadef1ec24889d6293552d17cf038b47cd256f4bf7e8740ef6"
   license "MIT"
 
   depends_on "go" => :build
