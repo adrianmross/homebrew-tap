@@ -1,8 +1,8 @@
 class OciIdm < Formula
   desc "Plan OCI Identity Domains apps, grants, and token-helper handoffs"
   homepage "https://github.com/adrianmross/oci-identity-apps"
-  url "https://github.com/adrianmross/oci-identity-apps/archive/refs/tags/v0.4.0.tar.gz"
-  sha256 "1d51e30da7dde0348a4431f8743ee0daba5e5e0d14760efbf0ed27e81ea02cf3"
+  url "https://github.com/adrianmross/oci-identity-apps/archive/refs/tags/v0.5.0.tar.gz"
+  sha256 "4eb3d64730902c4b0d9dfe2e544e154b4c2d63cdf6420a7bb0975ded0eed9559"
   license "MIT"
 
   conflicts_with "oci-identity-apps", because: "both install the oci-identity-apps compatibility command"
