@@ -1,8 +1,8 @@
 class OciIdentityApps < Formula
   desc "Plan OCI Identity Domains OAuth applications for CLI and automation flows"
   homepage "https://github.com/adrianmross/oci-identity-apps"
-  url "https://github.com/adrianmross/oci-identity-apps/archive/refs/tags/v0.2.0.tar.gz"
-  sha256 "3377c72e1acfdecf4ac46693ab84ef669ba72a58fda9123141ee510c7b3bd2e0"
+  url "https://github.com/adrianmross/oci-identity-apps/archive/refs/tags/v0.6.0.tar.gz"
+  sha256 "069d70b9223ce4691b9bc896aff2f29d25ee23a47b1f7d37aa88f176baba7c53"
   license "MIT"
 
   conflicts_with "oci-idm", because: "both install the oci-identity-apps command"
@@ -22,11 +22,11 @@ class OciIdentityApps < Formula
 
   test do
     assert_match version.to_s, shell_output("#{bin}/oci-identity-apps version")
-    output = shell_output("#{bin}/oci-identity-apps plan " \
+    output = shell_output("#{bin}/oci-identity-apps plan apps " \
                           "--issuer https://idcs-example.identity.oraclecloud.com " \
                           "--scope https://service.example.com/.default " \
-                          "--include user --format json")
-    assert_match "oci-identity-apps.plan.v1", output
+                          "--include user -o json")
+    assert_match "oci-idm.plan.v1", output
     assert_match "authorization_code", output
   end
 end
