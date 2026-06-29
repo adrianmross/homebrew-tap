@@ -1,8 +1,8 @@
 class OciIdm < Formula
   desc "Plan OCI Identity Domains apps, grants, and token-helper handoffs"
   homepage "https://github.com/adrianmross/oci-idm"
-  url "https://github.com/adrianmross/oci-idm/archive/refs/tags/v0.6.1.tar.gz"
-  sha256 "bda3a0094a835c67398b9a360a29cf900b8bee312ce238aa6924c874b6cd8d97"
+  url "https://github.com/adrianmross/oci-idm/archive/refs/tags/v0.7.0.tar.gz"
+  sha256 "302df8ebcb4a71ceeed1ea5ca29f6a2d7c38becbbe97acc0789bce26b3cd8bcf"
   license "MIT"
 
   conflicts_with "oci-identity-apps", because: "both install the oci-identity-apps compatibility command"
@@ -30,5 +30,12 @@ class OciIdm < Formula
                           "--include user -o json")
     assert_match "oci-idm.plan.v1", output
     assert_match "authorization_code", output
+    clone_output = shell_output("#{bin}/oci-idm clone app " \
+                                "--name hebe-obp-user " \
+                                "--issuer https://idcs-example.identity.oraclecloud.com " \
+                                "--scope https://service.example.com/.default " \
+                                "-o json")
+    assert_match "oci-idm.handoff.oci-context.v1", clone_output
+    assert_match "hebe-obp-user", clone_output
   end
 end
