@@ -1,7 +1,6 @@
 class Wiz < Formula
   desc "Red Wiz platform CLI"
   homepage "https://github.com/red-wiz/wiz-platform-cli"
-  version "0.2.33"
   if OS.mac?
     if Hardware::CPU.arm?
       url "https://github.com/red-wiz/wiz-platform-cli/releases/download/v0.2.33/wiz-platform-cli-aarch64-apple-darwin.tar.xz"
