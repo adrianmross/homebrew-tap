@@ -3,17 +3,17 @@ class Matrix < Formula
   homepage "https://github.com/adrianmross/matrix"
   if OS.mac?
     if Hardware::CPU.arm?
-      url "https://github.com/adrianmross/matrix/releases/download/v0.3.25/matrix-0.3.25-aarch64-apple-darwin.tar.gz"
-      sha256 "25d88c327b9bab6c90d239f591b358b7bdac8bc60e451ddfff8dab40e8b23316"
+      url "https://github.com/adrianmross/matrix/releases/download/v0.3.26/matrix-0.3.26-aarch64-apple-darwin.tar.gz"
+      sha256 "71aa808e43c2b731658a63ea9e04d85e3c8c4306eea9cb0ef075b623520c5077"
     end
     if Hardware::CPU.intel?
-      url "https://github.com/adrianmross/matrix/releases/download/v0.3.25/matrix-0.3.25-x86_64-apple-darwin.tar.gz"
-      sha256 "ee77bfb84e57c68793c6afcde74ed242cee46967945fed6ef3d1a6c69b65d493"
+      url "https://github.com/adrianmross/matrix/releases/download/v0.3.26/matrix-0.3.26-x86_64-apple-darwin.tar.gz"
+      sha256 "cd2c83a20101a6ecfefac4c884f787ba9ca3517cf74e739284ee21cb72c99c1d"
     end
   end
   if OS.linux? && Hardware::CPU.intel?
-    url "https://github.com/adrianmross/matrix/releases/download/v0.3.25/matrix-0.3.25-x86_64-unknown-linux-gnu.tar.gz"
-    sha256 "d96a5d78cb8b79d3f937d4a241df65a0088d183938c9ebc65885604ec4b81966"
+    url "https://github.com/adrianmross/matrix/releases/download/v0.3.26/matrix-0.3.26-x86_64-unknown-linux-gnu.tar.gz"
+    sha256 "d707b6644fb9904631db2ef13036cb7b714e7f7e72e33bfb8f25a53e6c8abedc"
   end
   license "Apache-2.0"
 
