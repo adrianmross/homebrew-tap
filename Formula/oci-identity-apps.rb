@@ -1,13 +1,13 @@
 class OciIdentityApps < Formula
   desc "Plan OCI Identity Domains OAuth applications for CLI and automation flows"
   homepage "https://github.com/adrianmross/oci-idm"
-  url "https://github.com/adrianmross/oci-idm/archive/refs/tags/v0.7.0.tar.gz"
-  sha256 "302df8ebcb4a71ceeed1ea5ca29f6a2d7c38becbbe97acc0789bce26b3cd8bcf"
+  url "https://github.com/adrianmross/oci-idm/archive/refs/tags/v0.8.0.tar.gz"
+  sha256 "bd4e791ef90dfe02672b3340515022e7e436394dac580802187239a83c34ff6e"
   license "MIT"
 
-  conflicts_with "oci-idm", because: "both install the oci-identity-apps command"
-
   depends_on "go" => :build
+
+  conflicts_with "oci-idm", because: "both install the oci-identity-apps command"
 
   def install
     ldflags = %W[
