@@ -60,6 +60,8 @@ class Proxyctl < Formula
       bin.install "proxyctl-rs"
     end
 
+    bin.install_symlink "proxyctl-rs" => "proxyctl"
+
     install_binary_aliases!
 
     # Homebrew will automatically install these, so we don't need to do that
