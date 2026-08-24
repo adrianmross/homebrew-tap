@@ -1,6 +1,4 @@
-# Adrian Ross Homebrew Tap
-
-Homebrew formulae for OCI operator CLIs.
+# adrianmross's brew tap
 
 ## Install
 
