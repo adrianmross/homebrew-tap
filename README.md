@@ -9,36 +9,11 @@ brew tap adrianmross/tap
 brew install oci-context oci-idm secretspec bastion-session oci-hop matrix
 ```
 
-`wiz` is released from a private GitHub repository. Give Homebrew a GitHub
-token that can read `red-wiz/wiz-platform-cli` before installing or upgrading
-it. The token is used only at formula evaluation and download time.
-
-```bash
-export HOMEBREW_GITHUB_API_TOKEN="$(gh auth token)"
-brew install wiz
-```
-
-Installed binaries:
-
-```text
-/opt/homebrew/bin/oci-context
-/opt/homebrew/bin/oci-contextd
-/opt/homebrew/bin/oci-idm
-/opt/homebrew/bin/oci-identity-apps
-/opt/homebrew/bin/secretspec
-/opt/homebrew/bin/wiz
-/opt/homebrew/bin/bastion-session
-/opt/homebrew/bin/hop
-/opt/homebrew/bin/oci-hop
-/opt/homebrew/bin/matrix
-```
-
 ## Upgrade
 
 ```bash
 brew update
 brew upgrade oci-context oci-idm secretspec bastion-session oci-hop matrix
-HOMEBREW_GITHUB_API_TOKEN="$(gh auth token)" brew upgrade wiz
 ```
 
 ## Formulae
@@ -48,7 +23,6 @@ HOMEBREW_GITHUB_API_TOKEN="$(gh auth token)" brew upgrade wiz
 | `oci-context` | OCI context, auth readiness, local metadata, and daemon support. |
 | `oci-idm` | OCI Identity Domains applications, grants, users, and auth-target handoffs. |
 | `secretspec` | Fork release of SecretSpec with composable provider workflows and Vault/OpenBao support. |
-| `wiz` | Red Wiz platform CLI, installed from an authenticated private release asset. |
 | `bastion-session` | OCI Bastion managed SSH sessions and VM-facing SSH aliases. |
 | `oci-hop` | Small front-door CLI for host-through-bastion workflows. |
 | `matrix` | Compatibility matrix CLI for zones, levels, facts, gates, and traces. |
@@ -86,14 +60,12 @@ host such as macOS or Linuxbrew.
 oci-context version -o json
 oci-idm version
 secretspec --version
-wiz --version
 bastion-session version -o json
 hop version -o json
 oci-hop version -o json
 brew test adrianmross/tap/oci-context
 brew test adrianmross/tap/oci-idm
 brew test adrianmross/tap/secretspec
-HOMEBREW_GITHUB_API_TOKEN="$(gh auth token)" brew test adrianmross/tap/wiz
 brew test adrianmross/tap/bastion-session
 brew test adrianmross/tap/oci-hop
 brew test adrianmross/tap/matrix
