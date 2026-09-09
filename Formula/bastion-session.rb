@@ -1,8 +1,8 @@
 class BastionSession < Formula
   desc "Manage OCI Bastion managed SSH sessions and host aliases"
   homepage "https://github.com/adrianmross/bastion-session"
-  url "https://github.com/adrianmross/bastion-session/archive/refs/tags/v0.9.3.tar.gz"
-  sha256 "447101d4795b899a3a371f14f57b7ffd722feb4eb0c3bf81b553225e2f0d5b28"
+  url "https://github.com/adrianmross/bastion-session/archive/refs/tags/v0.10.0.tar.gz"
+  sha256 "2d85b2ae219a69607184accbef7c94dccdf1b258291d25c1bb0d9a83185d7f31"
   license "MIT"
 
   depends_on "go" => :build
