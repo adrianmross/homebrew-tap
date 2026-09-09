@@ -1,0 +1,57 @@
+name: Bump formulae
+
+# Releasing a tool was only half done when its tag was pushed: the formula here still
+# pointed at the previous tarball until someone remembered to compute a new sha256 by
+# hand, which was forgotten more than once.
+#
+# This polls rather than being pushed to, on purpose. A push-based bump from each tool's
+# release workflow needs a credential with write access to THIS repo -- a PAT or a GitHub
+# App -- because a workflow's own GITHUB_TOKEN cannot write to another repository.
+# Polling needs no new secret at all: the token below is this repo's own, and release
+# data is public. repository_dispatch is wired up anyway so a source repo can trigger it
+# immediately if such a credential is ever added.
+
+on:
+  schedule:
+    # Every 6h. The cost of lag here is only that `brew install` serves the previous
+    # version for a few hours, so this does not need to be tight.
+    - cron: "17 */6 * * *"
+  workflow_dispatch:
+  repository_dispatch:
+    types: [formula-bump]
+
+permissions:
+  contents: write
+
+concurrency:
+  # Two runs rewriting the same formulae would race on the push.
+  group: bump-formulae
+  cancel-in-progress: false
+
+jobs:
+  bump:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v6.0.2
+
+      - name: Bump source-archive formulae
+        id: bump
+        env:
+          # Read-only use: raises the API rate limit. Release data itself is public.
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: python3 scripts/bump-formulae.py
+
+      - name: Commit and push
+        if: steps.bump.outputs.changed == 'true'
+        env:
+          SUMMARY: ${{ steps.bump.outputs.summary }}
+        run: |
+          set -euo pipefail
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add Formula
+          git commit -m "chore(formula): ${SUMMARY}"
+          # Rebase rather than force: a human bump landing mid-run must not be discarded.
+          git pull --rebase origin "${GITHUB_REF_NAME}"
+          git push origin "HEAD:${GITHUB_REF_NAME}"
