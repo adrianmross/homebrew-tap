@@ -1,28 +1,27 @@
 #!/usr/bin/env python3
-"""Bump source-archive formulae in this tap to their upstream's latest release.
+"""Bump formulae in this tap to their upstream's latest release.
 
-Why this exists: releasing one of the Go tools was only half done when its tag was
-pushed. The formula here still pointed at the previous tarball, so `brew install` kept
-serving the old version until someone remembered to compute a new sha256 by hand. That
-step was forgotten more than once.
+Why this exists: releasing a tool was only half done when its tag was pushed. The formula
+here still pointed at the previous version until someone remembered to recompute sha256s by
+hand, which was forgotten more than once.
 
-Scope is deliberately narrow. It only touches formulae whose url is a single GitHub
-source tarball:
+Handles both shapes in this tap, because the rewrite is the same operation either way --
+find every GitHub url, swap the version in it, and recompute the checksum that follows it:
 
-    url "https://github.com/<owner>/<repo>/archive/refs/tags/v1.2.3.tar.gz"
-    sha256 "<64 hex>"
+  source archive (the Go tools, one url):
+      url "https://github.com/<owner>/<repo>/archive/refs/tags/v1.2.3.tar.gz"
+      sha256 "<64 hex>"
 
-which is the shape every Go formula in this tap uses. The cargo-dist formulae (matrix,
-ivm, pump, secretspec, proxyctl) carry several per-platform urls pointing at
-releases/download, do not match, and are left alone -- cargo-dist generates those, and
-guessing at multi-platform assets here would be a good way to publish a broken formula.
+  release binaries (the cargo-dist tools, one url per platform):
+      url "https://github.com/<owner>/<repo>/releases/download/v1.2.3/<asset>"
+      sha256 "<64 hex>"
 
-New formulae of the right shape are picked up automatically; there is no list to keep in
-sync, which is the sort of thing that silently rots.
+A formula is only touched when every url in it points at the same owner/repo/version. A
+mixed formula is skipped rather than guessed at -- publishing a formula whose platforms
+disagree about which version they are would be worse than leaving it stale.
 
-The sha256 is always computed from a real download of the exact tarball the formula will
-point at. It is never copied from an API response, so a mismatch cannot be introduced by
-trusting metadata.
+Checksums always come from a real download of the exact asset the formula will point at,
+never from API metadata, so a mismatch cannot be introduced by trusting the API.
 """
 
 from __future__ import annotations
@@ -32,19 +31,21 @@ import hashlib
 import json
 import os
 import re
+import ssl
 import subprocess
 import sys
-import ssl
 import urllib.error
 import urllib.request
 from pathlib import Path
 
 FORMULA_DIR = Path(__file__).resolve().parent.parent / "Formula"
 
-# Anchored on the archive path so releases/download urls (cargo-dist) cannot match.
+# Both url shapes. The version is captured so it can be swapped wholesale; the rest of the
+# path (asset name, platform triple) is preserved verbatim.
 URL_RE = re.compile(
     r'^(?P<indent>[ \t]*)url[ \t]+"https://github\.com/(?P<owner>[\w.-]+)/(?P<repo>[\w.-]+)'
-    r'/archive/refs/tags/(?P<tag>v[^"]+)\.tar\.gz"[ \t]*$',
+    r'/(?:archive/refs/tags/(?P<tag_a>v[^"/]+)\.tar\.gz'
+    r'|releases/download/(?P<tag_b>v[^"/]+)/(?P<asset>[^"]+))"[ \t]*$',
     re.MULTILINE,
 )
 SHA_RE = re.compile(r'^(?P<indent>[ \t]*)sha256[ \t]+"(?P<sha>[0-9a-f]{64})"[ \t]*$', re.MULTILINE)
@@ -52,10 +53,9 @@ SEMVER_TAG_RE = re.compile(r"^v\d+\.\d+\.\d+$")
 
 
 def ssl_context() -> ssl.SSLContext:
-    """Default verification, but fall back to certifi's bundle when the interpreter has
-    no usable CA store -- common for python.org builds on macOS. Verification is never
-    disabled; an unverifiable download would defeat the point of pinning a sha256.
-    """
+    """Default verification, with a certifi fallback for interpreters that ship no CA store
+    (the python.org macOS builds). Verification is never disabled -- an unverifiable
+    download would defeat the point of pinning a sha256."""
     ctx = ssl.create_default_context()
     if ctx.cert_store_stats().get("x509_ca", 0) == 0:
         try:
@@ -67,21 +67,20 @@ def ssl_context() -> ssl.SSLContext:
     return ctx
 
 
-def api(url: str) -> dict | list:
+def api(url: str) -> dict:
     req = urllib.request.Request(url, headers={"Accept": "application/vnd.github+json"})
-    # Authenticated when available purely for rate limits; the data read here is public.
     token = os.environ.get("GITHUB_TOKEN", "").strip()
-    if token:
+    if token:  # rate limits only; this data is public
         req.add_header("Authorization", f"Bearer {token}")
     with urllib.request.urlopen(req, timeout=30, context=ssl_context()) as resp:
         return json.load(resp)
 
 
 def latest_stable_tag(owner: str, repo: str) -> str | None:
-    """Newest published, non-draft, non-prerelease release tag.
+    """Newest published, non-draft, non-prerelease tag.
 
-    /releases/latest already excludes drafts and prereleases, but it 404s for a repo whose
-    only releases are prereleases, so that is not an error worth failing on.
+    /releases/latest already excludes drafts and prereleases, and 404s for a repo whose only
+    releases are prereleases -- not an error worth failing the whole run over.
     """
     try:
         rel = api(f"https://api.github.com/repos/{owner}/{repo}/releases/latest")
@@ -90,13 +89,12 @@ def latest_stable_tag(owner: str, repo: str) -> str | None:
             return None
         raise
     tag = str(rel.get("tag_name", "")).strip()
-    # Guard against a tag scheme this script cannot reason about rather than
-    # bumping to something unexpected.
+    # A tag scheme this cannot reason about is skipped rather than bumped to something odd.
     return tag if SEMVER_TAG_RE.match(tag) else None
 
 
 def sha256_of(url: str) -> str:
-    with urllib.request.urlopen(url, timeout=120, context=ssl_context()) as resp:
+    with urllib.request.urlopen(url, timeout=180, context=ssl_context()) as resp:
         digest = hashlib.sha256()
         for chunk in iter(lambda: resp.read(1 << 20), b""):
             digest.update(chunk)
@@ -106,51 +104,87 @@ def sha256_of(url: str) -> str:
 def ruby_syntax_ok(source: str) -> bool | None:
     """True/False from `ruby -c`, or None when this ruby cannot judge the file at all.
 
-    Deliberately baselined by the caller against the ORIGINAL formula. Homebrew formulae
-    use modern Ruby -- the Go ones here use 3.1+ shorthand hash syntax (`ldflags:`) --
-    while macOS still ships 2.6, which rejects them. Treating that as a bad rewrite would
-    block every correct bump on a developer machine, so an unparseable baseline means
-    "no opinion" rather than "broken".
+    Baselined by the caller against the ORIGINAL formula. These use modern Ruby (3.1+
+    shorthand hash syntax) while macOS ships 2.6, which rejects it -- treating that as a bad
+    rewrite would block every correct bump on a developer machine.
     """
     try:
-        proc = subprocess.run(
-            ["ruby", "-c", "-"],
-            input=source,
-            text=True,
-            capture_output=True,
-        )
+        proc = subprocess.run(["ruby", "-c", "-"], input=source, text=True, capture_output=True)
     except FileNotFoundError:
-        return None  # no ruby here; not a reason to block a correct bump
+        return None
     return proc.returncode == 0
 
 
+def retarget(url: str, current: str, latest: str) -> str:
+    """Point a url at a new version.
+
+    The version shows up in two places and only one is the path segment. cargo-dist names
+    some assets with the version embedded (matrix-0.3.31-aarch64-apple-darwin.tar.gz) and
+    others without (pump-aarch64-apple-darwin.tar.xz), so swapping just the
+    /releases/download/<tag>/ segment silently produces a 404 for the former. Both the
+    v-prefixed tag and the bare version are replaced; the bare pass runs second and cannot
+    re-hit the already-updated segment because that now contains the NEW version.
+    """
+    out = url.replace(f"/{current}/", f"/{latest}/")
+    out = out.replace(f"/{current}.", f"/{latest}.")  # archive/refs/tags/v1.2.3.tar.gz
+    return out.replace(current.lstrip("v"), latest.lstrip("v"))
+
+
+def url_exists(url: str) -> bool:
+    """A guessed asset name that does not exist must fail loudly, not silently ship."""
+    req = urllib.request.Request(url, method="HEAD")
+    try:
+        with urllib.request.urlopen(req, timeout=60, context=ssl_context()):
+            return True
+    except urllib.error.HTTPError:
+        return False
+    except urllib.error.URLError:
+        return True  # transient network trouble is not proof the asset is missing
+
+
 def bump(path: Path, apply: bool) -> tuple[str, str] | None:
-    """Returns (old_tag, new_tag) when an update is available."""
+    """Returns (old_tag, new_tag) when an update was available."""
     text = path.read_text()
-    url_match = URL_RE.search(text)
-    if not url_match:
-        return None  # cargo-dist or hand-shaped formula; not ours to touch
+    matches = list(URL_RE.finditer(text))
+    if not matches:
+        return None  # hand-shaped formula; not ours to touch
 
-    owner = url_match["owner"]
-    repo = url_match["repo"]
-    current = url_match["tag"]
+    owners = {(m["owner"], m["repo"]) for m in matches}
+    tags = {m["tag_a"] or m["tag_b"] for m in matches}
+    if len(owners) != 1 or len(tags) != 1:
+        # Disagreeing urls mean this formula is not a simple version pin.
+        print(f"  {path.name}: urls disagree on repo/version; skipping", file=sys.stderr)
+        return None
 
+    (owner, repo), current = owners.pop(), tags.pop()
     latest = latest_stable_tag(owner, repo)
     if not latest or latest == current:
         return None
 
-    new_url = f"https://github.com/{owner}/{repo}/archive/refs/tags/{latest}.tar.gz"
-    new_sha = sha256_of(new_url)
+    # Rebuild left to right so every url keeps its own indentation and asset name, and each
+    # sha256 is matched to the url it actually follows rather than by position in the file.
+    out: list[str] = []
+    cursor = 0
+    for m in matches:
+        new_url = retarget(m.group(0).split('"')[1], current, latest)
+        sha_m = SHA_RE.search(text, m.end())
+        if not sha_m:
+            raise RuntimeError(f"url at offset {m.start()} has no sha256 after it")
+        # Nothing but whitespace/comments should sit between a url and its checksum.
+        between = text[m.end() : sha_m.start()]
+        if between.strip():
+            raise RuntimeError("unexpected content between url and its sha256")
 
-    sha_match = SHA_RE.search(text, url_match.end())
-    if not sha_match:
-        print(f"  {path.name}: url matched but no sha256 followed it; skipping", file=sys.stderr)
-        return None
+        out.append(text[cursor : m.start()])
+        out.append(f'{m["indent"]}url "{new_url}"')
+        out.append(between)
+        if not url_exists(new_url):
+            raise RuntimeError(f"asset not found after retargeting: {new_url}")
+        out.append(f'{sha_m["indent"]}sha256 "{sha256_of(new_url)}"')
+        cursor = sha_m.end()
+    out.append(text[cursor:])
+    updated = "".join(out)
 
-    updated = text[: url_match.start()] + f'{url_match["indent"]}url "{new_url}"' + text[url_match.end() : sha_match.start()]
-    updated += f'{sha_match["indent"]}sha256 "{new_sha}"' + text[sha_match.end() :]
-
-    # Only meaningful if this ruby can parse the file we started from; see ruby_syntax_ok.
     baseline = ruby_syntax_ok(text)
     if baseline is True and ruby_syntax_ok(updated) is False:
         raise RuntimeError("rewrite did not parse as ruby; not written")
@@ -161,13 +195,16 @@ def bump(path: Path, apply: bool) -> tuple[str, str] | None:
 
 
 def main() -> int:
-    parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument("--check", action="store_true", help="report without writing")
-    args = parser.parse_args()
+    ap = argparse.ArgumentParser(description=__doc__)
+    ap.add_argument("--check", action="store_true", help="report without writing")
+    ap.add_argument("--only", help="limit to one formula stem, e.g. pump")
+    args = ap.parse_args()
 
     changed: list[str] = []
     failed: list[str] = []
     for path in sorted(FORMULA_DIR.glob("*.rb")):
+        if args.only and path.stem != args.only:
+            continue
         try:
             result = bump(path, apply=not args.check)
         except Exception as exc:  # one bad upstream must not stop the rest
@@ -179,14 +216,14 @@ def main() -> int:
             print(f"  {path.stem}: {old} -> {new}")
             changed.append(f"{path.stem} {new.lstrip('v')}")
 
-    # "nothing to do" and "could not tell" are different answers, and conflating them is
-    # how a broken checker reports success forever. Fail loudly instead.
+    # "nothing to do" and "could not tell" are different answers. Conflating them is how a
+    # broken checker reports success forever, which an earlier version of this did.
     if failed:
         print(f"could not check: {', '.join(failed)}", file=sys.stderr)
         return 1
 
     if not changed:
-        print("all source-archive formulae are current")
+        print("all formulae are current")
         return 0
 
     summary = ", ".join(changed)
@@ -194,7 +231,6 @@ def main() -> int:
     if os.environ.get("GITHUB_OUTPUT"):
         with open(os.environ["GITHUB_OUTPUT"], "a", encoding="utf-8") as fh:
             fh.write(f"changed=true\nsummary={summary}\n")
-    # --check is a dry run for humans, so an available bump is not a failure there.
     return 0
 
 
