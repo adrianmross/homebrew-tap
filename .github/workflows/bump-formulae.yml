@@ -35,7 +35,7 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v6.0.2
 
-      - name: Bump source-archive formulae
+      - name: Bump formulae
         id: bump
         env:
           # Read-only use: raises the API rate limit. Release data itself is public.
