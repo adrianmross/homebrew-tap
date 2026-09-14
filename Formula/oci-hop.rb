@@ -1,8 +1,8 @@
 class OciHop < Formula
   desc "Prepare SSH access to OCI compute hosts through OCI Bastion"
   homepage "https://github.com/adrianmross/oci-hop"
-  url "https://github.com/adrianmross/oci-hop/archive/refs/tags/v0.9.1.tar.gz"
-  sha256 "a07e9eb1806bb477508087711321dcf35191db9d9ad4df6225d1b36055cad5e2"
+  url "https://github.com/adrianmross/oci-hop/archive/refs/tags/v0.9.2.tar.gz"
+  sha256 "fb1b2303e93e65073c7fb26aac358f040715df6d7e728de7ed2ce25e52f265f9"
   license "MIT"
 
   depends_on "go" => :build
