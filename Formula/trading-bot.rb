@@ -4,7 +4,7 @@ class TradingBot < Formula
   # Private repo, personal-use only: build from source via git (uses the
   # installing user's own git/ssh auth) rather than a release pipeline --
   # no public release process needed for a single-machine private install.
-  url "https://github.com/adrianmross/trading-bot.git", branch: "main", using: :git
+  url "git@github.com:adrianmross/trading-bot.git", branch: "main", using: :git
   version "0.1.0"
   license "MIT"
 
