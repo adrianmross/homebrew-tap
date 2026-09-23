@@ -1,8 +1,8 @@
 class OciIdm < Formula
   desc "Plan OCI Identity Domains apps, grants, and token-helper handoffs"
   homepage "https://github.com/adrianmross/oci-idm"
-  url "https://github.com/adrianmross/oci-idm/archive/refs/tags/v0.8.0.tar.gz"
-  sha256 "bd4e791ef90dfe02672b3340515022e7e436394dac580802187239a83c34ff6e"
+  url "https://github.com/adrianmross/oci-idm/archive/refs/tags/v0.9.0.tar.gz"
+  sha256 "fbe59501be95c6ad9da855085ca8cd59277aef9c51c45772f31580a4cdd60370"
   license "MIT"
 
   depends_on "go" => :build
