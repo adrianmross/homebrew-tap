@@ -1,8 +1,8 @@
 class OciContext < Formula
   desc "Manage OCI CLI contexts, auth, and local OCI metadata"
   homepage "https://github.com/adrianmross/oci-context"
-  url "https://github.com/adrianmross/oci-context/archive/refs/tags/v0.28.0.tar.gz"
-  sha256 "17a9f3acbf9bf44903e07c3118797160cb1deac606fb6b90d08c5c5ddba69b85"
+  url "https://github.com/adrianmross/oci-context/archive/refs/tags/v0.29.0.tar.gz"
+  sha256 "4f17c0bf77189fb467540c483286da650da5d82b7207185406b20dc10753f321"
   license "MIT"
 
   depends_on "go" => :build
