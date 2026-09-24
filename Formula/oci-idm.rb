@@ -7,8 +7,6 @@ class OciIdm < Formula
 
   depends_on "go" => :build
 
-  conflicts_with "oci-identity-apps", because: "both install the oci-identity-apps compatibility command"
-
   def install
     ldflags = %W[
       -s -w
