@@ -27,7 +27,7 @@ class OciScm < Formula
 
   def install
     bin.install "oscm", "oci-scm"
-    (share/"oci-scm").install "integrations", "docs"
+    (share/"oci-scm").install "docs"
   end
 
   test do
