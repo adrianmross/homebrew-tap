@@ -4,6 +4,7 @@ class OciContext < Formula
   url "https://github.com/adrianmross/oci-context/archive/refs/tags/v0.32.0.tar.gz"
   sha256 "29b2a2e8d132951a27e597e199ff3fcff0b06a454e6aaad0407aa7c991bebe20"
   license "MIT"
+  revision 1
 
   depends_on "go" => :build
 
@@ -17,10 +18,12 @@ class OciContext < Formula
 
     system "go", "build", *std_go_args(output: bin/"oci-context", ldflags:), "./cmd/oci-context"
     system "go", "build", *std_go_args(output: bin/"oci-contextd", ldflags:), "./cmd/oci-contextd"
+    bin.install_symlink bin/"oci-context" => "octx"
   end
 
   test do
     assert_match version.to_s, shell_output("#{bin}/oci-context version -o json")
+    assert_match version.to_s, shell_output("#{bin}/octx version -o json")
     assert_match "config_path", shell_output("#{bin}/oci-context paths -o json")
   end
 end

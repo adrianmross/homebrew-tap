@@ -4,6 +4,7 @@ class OciIdm < Formula
   url "https://github.com/adrianmross/oci-idm/archive/refs/tags/v0.13.0.tar.gz"
   sha256 "6bd53a2d590f3c5ef979b62d2e48ea08b7666968430a620be790295f1383e969"
   license "MIT"
+  revision 1
 
   depends_on "go" => :build
 
@@ -17,10 +18,12 @@ class OciIdm < Formula
 
     system "go", "build", *std_go_args(output: bin/"oci-idm", ldflags:), "./cmd/oci-idm"
     system "go", "build", *std_go_args(output: bin/"oci-identity-apps", ldflags:), "./cmd/oci-identity-apps"
+    bin.install_symlink bin/"oci-idm" => "oidm"
   end
 
   test do
     assert_match version.to_s, shell_output("#{bin}/oci-idm version")
+    assert_match version.to_s, shell_output("#{bin}/oidm version")
     assert_match version.to_s, shell_output("#{bin}/oci-identity-apps version")
     output = shell_output("#{bin}/oci-idm plan apps " \
                           "--issuer https://idcs-example.identity.oraclecloud.com " \
