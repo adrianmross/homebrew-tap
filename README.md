@@ -24,6 +24,7 @@ brew upgrade oci-context
 | `oci-context` | OCI context, auth readiness, local metadata, and daemon support. |
 | `oci-idm` | OCI Identity Domains applications, grants, users, and auth-target handoffs. |
 | `oci-hop` | Small front-door CLI for host-through-bastion workflows. |
+| `pursuit` | Job-application tracker: CLI, HTTP API, and embedded dashboard (pre-release, 0.x). |
 | `secretspec` | Fork release of SecretSpec with composable provider workflows and Vault/OpenBao support. |
 
 Most formulae build from tagged source releases. The `matrix` formula installs
