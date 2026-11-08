@@ -5,22 +5,22 @@ class Pursuit < Formula
   # them from the real assets once pursuit publishes its first release.
   if OS.mac?
     if Hardware::CPU.arm?
-      url "https://github.com/adrianmross/pursuit/releases/download/v0.7.0/pursuit_0.7.0_darwin_arm64.tar.gz"
-      sha256 "cd35a0bbba55bbf95209d0dd30572be55654364c259ada722a808ad84cbc8e0a"
+      url "https://github.com/adrianmross/pursuit/releases/download/v0.8.0/pursuit_0.8.0_darwin_arm64.tar.gz"
+      sha256 "684cddaccdae4da667995c1b7bf84a47828516274778f3ffd12c93b82b1814b7"
     end
     if Hardware::CPU.intel?
-      url "https://github.com/adrianmross/pursuit/releases/download/v0.7.0/pursuit_0.7.0_darwin_amd64.tar.gz"
-      sha256 "cda2676e9c4982d4ca1958bcbd42900fa8c52fccf6d533660350d2b8df314ab8"
+      url "https://github.com/adrianmross/pursuit/releases/download/v0.8.0/pursuit_0.8.0_darwin_amd64.tar.gz"
+      sha256 "1e43c66b25718aa20972cfa6d5e542ad032293323176347c62ab93af2be42daf"
     end
   end
   if OS.linux?
     if Hardware::CPU.arm?
-      url "https://github.com/adrianmross/pursuit/releases/download/v0.7.0/pursuit_0.7.0_linux_arm64.tar.gz"
-      sha256 "74276027ccce7ad1447303bc05c67b701e218efac928768d539b69fc65eb8eb6"
+      url "https://github.com/adrianmross/pursuit/releases/download/v0.8.0/pursuit_0.8.0_linux_arm64.tar.gz"
+      sha256 "d2d2015bb77e23d6439208f4bd78dafb44a144f5638adac4689111f2c35ce918"
     end
     if Hardware::CPU.intel?
-      url "https://github.com/adrianmross/pursuit/releases/download/v0.7.0/pursuit_0.7.0_linux_amd64.tar.gz"
-      sha256 "3423d06fc17928b034af7e6e48aef88082cd4ced9905cb94beb2e0914517a9f7"
+      url "https://github.com/adrianmross/pursuit/releases/download/v0.8.0/pursuit_0.8.0_linux_amd64.tar.gz"
+      sha256 "d8f523cb97ab7fffe03eef2e18a230072b53617a0d650768b8251bc87534a10f"
     end
   end
   license "MIT"
