@@ -25,6 +25,7 @@ brew upgrade oci-context
 | `oci-idm` | OCI Identity Domains applications, grants, users, and auth-target handoffs. |
 | `oci-hop` | Small front-door CLI for host-through-bastion workflows. |
 | `pursuit` | Job-application tracker: CLI, HTTP API, and embedded dashboard (pre-release, 0.x). |
+| `preview` | Run a repo's dev server detached, one per git worktree. |
 | `secretspec` | Fork release of SecretSpec with composable provider workflows and Vault/OpenBao support. |
 
 Most formulae build from tagged source releases. The `matrix` formula installs
